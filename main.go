@@ -50,14 +50,16 @@ func run() error {
 
 func drawBackground(r *sdl.Renderer) error {
 	r.Clear()
-	t, err := img.LoadTexture("res/images/back.png")
+	t, err := img.LoadTexture(r, "res/images/back.png")
 	if err != nil {
 		return fmt.Errorf("Could not drawBackground: %v", err)
 	}
+	defer t.Destroy()
 	if err := r.Copy(t, nil, nil); err != nil {
 		return fmt.Errorf("Could not copy background: %v", err)
 	}
-
+	r.Present()
+	return nil
 }
 
 func drawTitle(r *sdl.Renderer) error {
