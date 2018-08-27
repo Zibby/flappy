@@ -5,7 +5,6 @@ import (
 	"os"
 	"time"
 
-	img "github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 	ttf "github.com/veandco/go-sdl2/ttf"
 )
@@ -39,26 +38,17 @@ func run() error {
 		return fmt.Errorf("Could not draw title: %v", err)
 	}
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(1 * time.Second)
 
-	if err := drawBackground(r); err != nil {
-		return fmt.Errorf("Could not draw background: %v", err)
-	}
-	time.Sleep(5 * time.Second)
-	return nil
-}
-
-func drawBackground(r *sdl.Renderer) error {
-	r.Clear()
-	t, err := img.LoadTexture(r, "res/images/back.png")
+	s, err := newScene(r)
 	if err != nil {
-		return fmt.Errorf("Could not drawBackground: %v", err)
+		return fmt.Errorf("Could not create scene: %v", err)
 	}
-	defer t.Destroy()
-	if err := r.Copy(t, nil, nil); err != nil {
-		return fmt.Errorf("Could not copy background: %v", err)
+	defer s.destroy()
+	if err := s.paint(r); err != nil {
+		return fmt.Errorf("Could not create scene: %v", err)
 	}
-	r.Present()
+	time.Sleep(5 * time.Second)
 	return nil
 }
 
