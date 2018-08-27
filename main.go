@@ -32,6 +32,7 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("could not create window %v", err)
 	}
+	w.SetTitle("Zibby Bird - alpha")
 	defer w.Destroy()
 	_ = r
 
