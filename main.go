@@ -39,7 +39,7 @@ func run() error {
 		return fmt.Errorf("Could not draw title: %v", err)
 	}
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	s, err := newScene(r)
 	if err != nil {
@@ -70,7 +70,7 @@ func drawTitle(r *sdl.Renderer) error {
 	defer f.Close()
 
 	c := sdl.Color{R: 225, G: 100, B: 0, A: 225}
-	s, err := f.RenderUTF8Solid("HELLO", c)
+	s, err := f.RenderUTF8Solid("Zibby Bird", c)
 	if err != nil {
 		return fmt.Errorf("could not render title: %v", err)
 	}
