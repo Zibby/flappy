@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -45,11 +46,18 @@ func run() error {
 		return fmt.Errorf("Could not create scene: %v", err)
 	}
 	defer s.destroy()
-	if err := s.paint(r); err != nil {
-		return fmt.Errorf("Could not create scene: %v", err)
+
+	events := make(chan sdl.Event)
+	errc := s.run(events, r)
+
+	runtime.LockOSThread()
+	for {
+		select {
+		case events <- sdl.WaitEvent():
+		case err := <-errc:
+			return err
+		}
 	}
-	time.Sleep(5 * time.Second)
-	return nil
 }
 
 func drawTitle(r *sdl.Renderer) error {
@@ -62,7 +70,7 @@ func drawTitle(r *sdl.Renderer) error {
 	defer f.Close()
 
 	c := sdl.Color{R: 225, G: 100, B: 0, A: 225}
-	s, err := f.RenderUTF8Solid("Zibby Bird", c)
+	s, err := f.RenderUTF8Solid("HELLO", c)
 	if err != nil {
 		return fmt.Errorf("could not render title: %v", err)
 	}
